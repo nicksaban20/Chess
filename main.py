@@ -1,12 +1,13 @@
-board = [['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'], #8 #0 BLACK 
-         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], #7 #1
-         ['.', '.', '.', '.', '.', '.', '.', '.'], #6 #2 (2,1)
-         ['.', '.', '.', '.', '.', '.', '.', '.'], #5 #3
-         ['.', '.', '.', '.', '.', '.', '.', '.'], #4 #4
-         ['.', '.', '.', '.', '.', '.', '.', '.'], #3 #5 (5, 4)
-         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], #2 #6
-         ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']] #1 #7 WHITE
+board = [['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'], #8   #0 BLACK 
+         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], #7   #1
+         ['.', '.', '.', '.', '.', '.', '.', '.'], #6   #2
+         ['.', '.', '.', '.', '.', '.', '.', '.'], #5   #3
+         ['.', '.', '.', '.', '.', '.', '.', '.'], #4   #4
+         ['.', '.', '.', '.', '.', '.', '.', '.'], #3   #5
+         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], #2   #6
+         ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']] #1   #7 WHITE
      #     a    b    c    d    e    f    g    h
+     
      #     0    1    2    3    4    5    6    7
 
 
@@ -15,8 +16,7 @@ board = [['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'], #8 #0 BLACK
 
 # TO DO:
 
-# move pieces not working
-#pawns
+# taking pieces!!!
 
 # Traceback (most recent call last):
 #   File "/Users/nick/Desktop/VSCode/Python/Chess/main.py", line 565, in <module>
@@ -29,8 +29,6 @@ board = [['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'], #8 #0 BLACK
 #                              ~~~~^^^
 # TypeError: 'NoneType' object is not subscriptable
 
-#
-#work on black
 
 # Add in support for less common moves
 #Qh4xe1
@@ -308,14 +306,14 @@ def legal_move_trait(move, piece): #special case for pawns
         elif move[0] == 'P':
             if old_column == letter_to_num(move):
                 if player == WHITE:
-                    if old_row == 1:
+                    if old_row == 6:
                         if old_row - 2 == row_to_num(move) or old_row - 1 == row_to_num(move):
                             return True
                     else:
                         if old_row - 1 == row_to_num(move):
                             return True
                 if player == BLACK:
-                    if old_row == 6:
+                    if old_row == 1:
                         if old_row + 2 == row_to_num(move) or old_row + 1 == row_to_num(move):
                             return True
                     else:
@@ -551,7 +549,7 @@ def legal_move(player, move):
         if type_of_move(move) == NORMAL:
             if legal_move_notoccupied(player, move):
                 if legal_move_trait(move, piece) and legal_move_not_blocked(player, move, piece):
-                    move_piece(player, piece)
+                    move_piece(player, move, piece)
                     return True
 #not occupied and trait are not working
 
@@ -614,16 +612,16 @@ def get_user_input(player):
 
 
 
-def move_piece(player, move):
-    if type_of_move(move) == NORMAL:
-        if player == WHITE:
-            board[row_to_num(move)][letter_to_num(move)] = move[0]
-            board[move[0]][move[1]] = "."
-            move_database.append(move)
-        if player == BLACK:
-            board[row_to_num(move)][letter_to_num(move)] = move[0].tolower()
-            board[move[0]][move[1]] = "."
-            move_database.append(move)
+def move_piece(player, move, piece):
+    # if type_of_move(move) == NORMAL:
+    if player == WHITE:
+        board[int(row_to_num(move))][int(letter_to_num(move))] = move[0]
+        board[piece[0]][piece[1]] = "."
+        move_database.append(move)
+    if player == BLACK:
+        board[int(row_to_num(move))][int(letter_to_num(move))] = move[0].lower()
+        board[piece[0]][piece[1]] = "."
+        move_database.append(move)
     
 
 
@@ -631,9 +629,14 @@ def move_piece(player, move):
 
 player = WHITE
 
-move = get_user_input(player)
-print_board(board)
-print(move_database)
+while True:
+    move = get_user_input(player)
+    print_board(board)
+    print(move_database)
+    if player == WHITE:
+        player = BLACK
+    else:
+        player = WHITE
 
 
 
